@@ -108,6 +108,7 @@ references/
   neo-naver.md        ← Naver (Search Advisor · AI Briefing · blog two-track)
   measure.md          ← the measurement loop (fixing it is not the finish line)
   en/                 ← English mirrors of all reference docs (for human readers)
+scripts/audit.sh      ← Phase 0 in one command: crawler-eye evidence for all five lanes (curl only)
 .claude-plugin/       ← plugin & marketplace manifests (/plugin install support)
 ```
 

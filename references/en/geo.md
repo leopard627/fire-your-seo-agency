@@ -58,6 +58,11 @@ User-agent: Perplexity-User
 Allow: /
 ```
 
+- ⚠️ **Google-Extended ≠ AI Overviews**: Google-Extended only governs Gemini training and
+  grounding. AI Overviews and AI Mode draw from the regular Googlebot index, so this token
+  neither blocks nor enables them — and blocking Googlebot kills Search itself. Don't mistake
+  "block AI training" and "get cited by AI search" for the same switch.
+
 If your content is an asset and you only want to block **training**, Disallow only the
 first row — blocking search/fetch along with it kills citation traffic itself.
 The roster changes — recheck each vendor's crawler docs quarterly.

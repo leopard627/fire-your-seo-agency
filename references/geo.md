@@ -57,6 +57,11 @@ User-agent: Perplexity-User
 Allow: /
 ```
 
+- ⚠️ **Google-Extended ≠ AI Overviews**: Google-Extended는 Gemini 학습·그라운딩만 다룬다.
+  AI Overviews·AI Mode는 일반 Googlebot 색인에서 답을 꺼내므로 이 토큰으로는 막히지도 열리지도
+  않고, Googlebot을 막으면 검색 자체가 죽는다. "AI 학습 차단"과 "AI 검색 인용"을 같은 스위치로
+  착각하지 마라.
+
 콘텐츠가 자산이라 **학습만** 막고 싶다면 첫 행(학습용)만 Disallow — 검색·fetch를 같이
 막으면 인용 유입 자체가 죽는다. 명단은 변한다 — 각사 크롤러 문서를 분기마다 확인하라.
 

@@ -105,6 +105,7 @@ references/
   neo-naver.md        ← 네이버 (서치어드바이저·AI 브리핑·블로그 투트랙)
   measure.md          ← 측정 루프 (고치고 끝이 아니다)
   en/                 ← 전체 레퍼런스 영문 미러 (사람 독자용)
+scripts/audit.sh      ← Phase 0 진단 한 방: 다섯 레인 근거를 크롤러의 눈으로 출력 (curl만 사용)
 .claude-plugin/       ← 플러그인·마켓플레이스 매니페스트 (/plugin 설치 지원)
 ```
 
