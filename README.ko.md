@@ -90,6 +90,29 @@ git clone https://github.com/leopard627/fire-your-seo-agency.git ~/.claude/skill
 6. **콘텐츠 엔진** — 서브 블로그 세팅, 질문 백로그, 발행 게이트, 갱신·병합 정책
 7. **측정 루프** — 고치고 끝이 아니라, 재측정 일정을 잡고 숫자로 확인합니다
 
+### 필요한 항목만 진단하기
+
+전체 진단 외에 필요한 영역만 지정할 수 있습니다:
+
+```text
+/fire-your-seo-agency 이 사이트의 Core Web Vitals·모바일·HTTPS를 진단해줘
+/fire-your-seo-agency 이 페이지들의 콘텐츠 품질과 E-E-A-T를 검토해줘
+/fire-your-seo-agency 첨부한 키워드·백링크 자료로 이 경쟁사들과 비교해줘
+/fire-your-seo-agency 이 지역 업체와 구글 비즈니스 프로필을 점검해줘
+```
+
+- **기술:** 원본 HTML과 렌더 결과 비교, 모바일·HTTPS 점검,
+  실제 사용자 Core Web Vitals와 실험실 측정 구분.
+- **콘텐츠 품질:** Google QRG·사용자 중심 콘텐츠 지침에 따른 경험·전문성·평판·신뢰 근거 검토,
+  부실하거나 오래된 콘텐츠 확인.
+- **경쟁사·백링크:** 시장·기간·표본 한계를 명시한 키워드 공백 및 제공된 링크 자료 분석.
+- **로컬:** 적격 지역 업체의 프로필 정확성과 웹사이트 정보 일치 여부 확인.
+
+스킬은 작업 지침이며 크롤러·유료 데이터·계정 연결이 내장된 프로그램이 아닙니다.
+도구·계정 접근이나 내보낸 자료가 없으면 공개 근거를 검토하고 나머지는 **미확인/미측정**으로
+표시합니다. 품질 평가를 구글 공식 점수로 제시하지 않으며, 순위나 AI 인용을 보장하지 않습니다.
+위 예시는 기존 스킬 호출 방식이며, 별도의 `/seo` 하위 명령어를 추가하는 것은 아닙니다.
+
 ## 하지 않는 것
 
 - ❌ 백링크 구매, 품앗이 자동화, 콘텐츠 스팸 — **검색엔진과 싸우지 않습니다**
@@ -105,6 +128,9 @@ git clone https://github.com/leopard627/fire-your-seo-agency.git ~/.claude/skill
 SKILL.md              ← 에이전트 운영 절차 (진단 → 구현 → 측정)
 references/
   seo.md              ← 기술 SEO 체크리스트 + 실전 함정
+  content-quality.md  ← QRG 참고 콘텐츠 품질·E-E-A-T 검토
+  competitive-links.md ← 경쟁사 키워드 공백·백링크 근거 분석
+  local-seo.md        ← 지역 업체·구글 비즈니스 프로필 점검
   aeo.md              ← 답변엔진 최적화 (Bing 등록·AI Overviews·Copilot·E-E-A-T)
   geo.md              ← 생성엔진 최적화 (AI 크롤러 정책·llms.txt·1차 소스)
   llmo.md             ← 모델 인지 최적화 (브랜드 엔티티)

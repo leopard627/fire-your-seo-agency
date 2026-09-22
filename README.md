@@ -94,6 +94,31 @@ touching anything:
 6. **Content engine** — sub-blog setup, question backlog, publish gate, refresh & merge policy
 7. **Measurement loop** — schedules a re-measurement and proves the change with numbers
 
+### Focused audits
+
+Ask for only the area you need, for example:
+
+```text
+/fire-your-seo-agency audit this site's Core Web Vitals, mobile usability and HTTPS
+/fire-your-seo-agency review these pages for content quality and E-E-A-T
+/fire-your-seo-agency compare these competitors using the attached keyword and backlink exports
+/fire-your-seo-agency audit this local business and its Google Business Profile
+```
+
+- **Technical:** compare raw and rendered content; inspect mobile usability and HTTPS;
+  separate real-user Core Web Vitals from lab measurements.
+- **Content quality:** use Google QRG and people-first guidance to review evidence of
+  experience, expertise, reputation and trust; identify thin or outdated content.
+- **Competitors and backlinks:** compare keyword coverage and supplied link data with
+  their market, time period and sampling limits recorded.
+- **Local:** review eligible businesses, profile accuracy and website consistency.
+
+These are instructions, not bundled crawlers, paid datasets or account connections.
+Without tool/account access or exports, the agent reviews public evidence and marks the
+rest **unverified/unmeasured**, rather than inventing metrics. Quality reviews are not
+official Google scores, and neither rankings nor AI citations are guaranteed.
+The examples use the existing skill invocation; this does not add `/seo` subcommands.
+
 ## What it refuses to do
 
 - ❌ Buying backlinks, engagement pods, content spam — **we don't fight the search engine**
@@ -109,6 +134,9 @@ Become the primary source for a number, and the citations follow.
 SKILL.md              ← agent operating procedure (audit → implement → measure)
 references/
   seo.md              ← technical SEO checklist + real-world traps
+  content-quality.md  ← QRG-informed content quality and E-E-A-T review
+  competitive-links.md ← competitor keyword gaps and backlink evidence
+  local-seo.md        ← local businesses and Google Business Profile
   aeo.md              ← answer engine optimization (Bing WMT · AI Overviews · Copilot · E-E-A-T)
   geo.md              ← generative engine optimization (AI crawler policy · llms.txt · primary source)
   llmo.md             ← model-knowledge optimization (brand entity)
