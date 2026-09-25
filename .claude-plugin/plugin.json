@@ -1,7 +1,7 @@
 {
   "name": "fire-your-seo-agency",
   "description": "Fire your SEO agency — a Claude Code skill that audits and implements SEO·AEO·GEO·LLMO·NEO(Naver) itself: crawler-eye audit, intent landing pages, llms.txt, structured data, Naver AI Briefing, a content engine (sub-blog, question backlog, publish gate, refresh), and a measurement loop.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": { "name": "leopard627" },
   "homepage": "https://github.com/leopard627/fire-your-seo-agency",
   "license": "MIT",

@@ -7,7 +7,7 @@
       "name": "fire-your-seo-agency",
       "source": "./",
       "description": "Fire your SEO agency — audits and implements SEO·AEO·GEO·LLMO·NEO(Naver) itself. Crawler-eye audit, intent landing pages, llms.txt, structured data, Naver AI Briefing, content engine (sub-blog · backlog · publish gate · refresh), measurement loop.",
-      "version": "1.2.0"
+      "version": "1.2.1"
     }
   ]
 }

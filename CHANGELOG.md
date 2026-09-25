@@ -5,7 +5,9 @@ Notable changes per release. Versions match the plugin tags
 `.claude-plugin/marketplace.json` must carry the same version, and
 `tools/validate.py` fails the build when they drift apart.
 
-## Unreleased
+## 1.2.1 — 2026-09-25
+
+Repository checks and CI (contributed by @twoimo in #2), plus one content-ops fix.
 
 ### Added
 
@@ -24,6 +26,7 @@ Notable changes per release. Versions match the plugin tags
 - `.github/workflows/validate.yml` — CI running the checks, the tests and the asset
   check on every push and pull request
 - `CHANGELOG.md` (this file)
+- README (EN/KO): stars, forks, release and license badges plus a Star History chart
 
 ### Changed
 
