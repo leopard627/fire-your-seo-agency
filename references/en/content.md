@@ -246,6 +246,9 @@ the original first, a copy gets treated as the original.
 | Threads · X · LinkedIn | One key number + link (this is both an LLMO surface and a traffic source) | The same phrasing on every post |
 | GitHub README · build log | How you built it, measured — factual register | Promotional tone |
 
+- [ ] **Check whether the editor renders Markdown first**: the Naver Blog editor does not. Paste a
+      Markdown draft and `#`, `**` and `|` show up as literal characters — rebuild headings, bold
+      and tables with the editor's own tools, then check the published post on mobile for leaked symbols
 - [ ] Log distribution timing in the inventory — this is where you learn which channel actually drives traffic
 
 ## 8. Measurement — "N posts a month" is not a metric

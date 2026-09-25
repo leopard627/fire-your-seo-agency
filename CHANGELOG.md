@@ -27,6 +27,8 @@ Notable changes per release. Versions match the plugin tags
 
 ### Changed
 
+- `references/content.md` §7 (+ English mirror): check whether the target editor renders
+  Markdown before cross-posting; the Naver Blog editor shows `#`, `**` and `|` literally
 - `assets/social-preview.png` recompressed losslessly: 1,252,826 → 1,056,122 bytes
   (−15.70%) with a byte-identical pixel grid
 - `assets/thumbnail-prompt.md` overlay spec replaced with the geometry and copy actually
