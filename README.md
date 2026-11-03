@@ -70,6 +70,13 @@ git clone https://github.com/leopard627/fire-your-seo-agency.git .claude/skills/
 git clone https://github.com/leopard627/fire-your-seo-agency.git ~/.claude/skills/fire-your-seo-agency
 ```
 
+For Codex, put it under `.agents/skills` (no need to commit a copy into your repo):
+
+```bash
+git clone https://github.com/leopard627/fire-your-seo-agency.git .agents/skills/fire-your-seo-agency   # project
+git clone https://github.com/leopard627/fire-your-seo-agency.git ~/.agents/skills/fire-your-seo-agency # personal
+```
+
 Then in Claude Code:
 
 ```
@@ -122,9 +129,9 @@ references/
   measure.md          ← the measurement loop (fixing it is not the finish line)
   en/                 ← English mirrors of all reference docs (for human readers)
 .claude-plugin/       ← plugin & marketplace manifests (/plugin install support)
-tools/                ← repository checks (validate.py) + lossless asset optimizer
+tools/                ← repository checks (validate.py) + outbound domain allowlist
 tests/                ← unit tests for the checks
-.github/workflows/    ← CI: checks, tests and the asset check on every push/PR
+.github/workflows/    ← CI: checks and tests on every push/PR, monthly crawler-table freshness
 ```
 
 > The Korean documents under `references/` are canonical (the agent reads those);
@@ -132,23 +139,27 @@ tests/                ← unit tests for the checks
 
 ## Repository checks
 
-This repo checks itself — `.github/workflows/validate.yml` runs all of it on every push
-and pull request:
+`.github/workflows/validate.yml` runs these on every push and pull request (standard
+library only):
 
 ```bash
-python3 tools/validate.py --strict          # 10 checks, standard library only
-python3 -m unittest discover -s tests -t .  # unit tests for every check
-python3 -m pip install pillow
-python3 tools/optimize_assets.py --check    # flags recompressible assets
+python3 tools/validate.py                   # repository checks
+python3 -m unittest discover -s tests -t .  # tests for the checker
+python3 tools/validate.py --max-age 100     # is the crawler table older than 100 days? (monthly)
 ```
 
-`tools/validate.py` enforces the things that rot silently in a docs-only repo: the
-`SKILL.md` frontmatter contract (kebab-case name, 64-character name limit, 1024-character
-single-line description), `plugin.json` ↔ `marketplace.json` version and name agreement,
-`CHANGELOG.md` matching the manifest version, relative links and anchors, Korean/English
-reference parity (heading counts, table rows, checkboxes, section numbering), the asset
-budget and preview dimensions, the MIT license metadata, and a secret scan over every
-text file.
+- **Domains** — every outbound URL or domain in the docs must be on
+  `tools/allowed-domains.txt`; a new domain only gets in through a diff to that file
+- **Crawlers** — the AI crawler table in `geo.md` and the log command in `measure.md`
+  cover the same user agents, in both languages
+- **Release** — `SKILL.md`, `plugin.json`, `marketplace.json` and `CHANGELOG.md` agree on
+  name and version
+- **Mirror** — each English mirror keeps the Korean original's structure (headings,
+  section numbers, tables, checkboxes) and cites the same outbound hosts
+- **Links and skill** — relative links, anchors and path mentions resolve; `SKILL.md`
+  frontmatter limits
+
+Contribution rules are in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Star History
 

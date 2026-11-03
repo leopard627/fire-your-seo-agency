@@ -17,8 +17,10 @@
 
 ```bash
 # 접근 로그에서 AI 크롤러 방문 집계 (선행 지표)
-grep -iE 'GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-User|PerplexityBot' access.log \
-  | awk '{print $1}' | wc -l
+AI_BOTS='GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|PerplexityBot|Perplexity-User|CCBot|Google-Agent'
+grep -ciE "$AI_BOTS" access.log
+# 응답 코드 분포 — 403·429가 보이면 CDN·WAF가 막고 있다 (combined 로그 형식의 9번째 필드)
+grep -iE "$AI_BOTS" access.log | awk '{print $9}' | sort | uniq -c
 # 로그 접근이 없으면: Cloudflare/Vercel 등 호스팅 대시보드의 봇 트래픽 분류로 대체
 ```
 

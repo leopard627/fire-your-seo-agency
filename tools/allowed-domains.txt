@@ -1,0 +1,33 @@
+# Outbound domains the docs may link to or mention. One entry per line:
+# a host (subdomains included) or a host/path prefix.
+#
+# tools/validate.py fails when a document points anywhere else. Outside PRs have
+# tried to slip commercial links into this repo as "case studies" and "tools";
+# adding a line here is the deliberate, reviewable step that lets one through.
+
+# Placeholders used in examples
+example.com
+
+# Standards and official search-engine tools
+schema.org
+bing.com/webmasters
+searchadvisor.naver.com
+dart.fss.or.kr
+
+# Official AI crawler documentation (references/geo.md §2)
+developers.openai.com/api/docs/bots
+support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler
+developers.google.com/crawling
+docs.perplexity.ai/guides/bots
+support.apple.com/en-us/119829
+commoncrawl.org/ccbot
+
+# This project and its author
+github.com/leopard627/fire-your-seo-agency
+chickstockfi.com
+threads.com/@kindainvestor
+claude.com/claude-code
+
+# README badges and charts
+img.shields.io
+star-history.com

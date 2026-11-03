@@ -1,4 +1,4 @@
-# AEO — 답변엔진 최적화 (Google AI Overviews · Bing Copilot)
+# AEO — 답변엔진 최적화 (Google AI Overviews·AI 모드 · Bing Copilot)
 
 검색 결과 맨 위 AI 답변 박스가 당신을 인용하게 만드는 레인. 답변엔진은 페이지를 "읽고
 요약"하는 게 아니라 **답이 되는 문장을 찾아 추출**한다. 추출되기 좋은 형태가 전부다.

@@ -5,6 +5,39 @@ Notable changes per release. Versions match the plugin tags
 `.claude-plugin/marketplace.json` must carry the same version, and
 `tools/validate.py` fails the build when they drift apart.
 
+## Unreleased
+
+### Changed
+
+- `tools/validate.py` rewritten around what actually drifts or gets abused here. New checks:
+  an outbound-domain allowlist (`tools/allowed-domains.txt`) for every URL and bare domain
+  in the docs, AI crawler consistency between the `geo.md` table and the `measure.md` log
+  command, outbound-host parity between Korean and English references, and a crawler-table
+  freshness check (`--max-age`, run monthly by CI). Dropped: license text, secret-pattern
+  scan (GitHub does this), social-preview size and dimension checks, and the `--strict` and
+  `--json` modes
+- `references/geo.md` §2 (+ English): crawler table verified against each vendor's docs on
+  2026-11-03 with sources; `Google-Agent` added; notes that `Google-Extended` and
+  `Applebot-Extended` are robots.txt-only tokens, that blocking `Google-Extended` does not
+  affect AI Overviews or AI Mode, which user-triggered fetchers may ignore robots.txt, and
+  that a CDN/WAF bot block overrides robots.txt
+- `references/measure.md` (+ English): the AI crawler log command now covers every crawler
+  in the `geo.md` table (it was missing `Claude-SearchBot`, `Perplexity-User` and `CCBot`)
+  and shows a status-code breakdown to spot WAF blocks
+- `references/aeo.md` (+ English): AI Mode named alongside AI Overviews
+- `SKILL.md` Phase 0: the `<h1>` count works on minified HTML; the 404 probe uses an ASCII path
+- README (EN/KO): Codex install paths (`.agents/skills`), rewritten repository-checks section
+
+### Added
+
+- `CONTRIBUTING.md` and a pull request template: what the repo accepts (fixes, policy updates
+  with official sources, measured findings) and what it does not (commercial links, case
+  studies, promotion of other tools, committed copies of the skill)
+
+### Removed
+
+- `tools/optimize_assets.py` and the Pillow install in CI — the one image is already optimized
+
 ## 1.2.1 — 2026-09-25
 
 Repository checks and CI (contributed by @twoimo in #2), plus one content-ops fix.

@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: "0 0 1 * *"  # monthly: is the AI crawler table still current?
   workflow_dispatch:
 
 permissions:
@@ -18,10 +20,10 @@ jobs:
         with:
           python-version: "3.12"
       - name: Repository checks
-        run: python3 tools/validate.py --strict
+        run: python3 tools/validate.py
       - name: Unit tests
         run: python3 -m unittest discover -s tests -t . -v
-      - name: Asset compression check
-        run: |
-          python3 -m pip install --quiet --disable-pip-version-check pillow
-          python3 tools/optimize_assets.py --check
+      # Only on the schedule, so an aging date never blocks an unrelated PR.
+      - name: Crawler table freshness
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: python3 tools/validate.py --max-age 100

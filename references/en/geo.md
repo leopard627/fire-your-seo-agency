@@ -36,7 +36,7 @@ written per purpose. No policy = leaving it to chance:
 |---|---|---|
 | **Training** (model training data) | GPTBot, ClaudeBot, Google-Extended, CCBot, Applebot-Extended | future models knowing your brand (LLMO) |
 | **Search indexing** (AI search's own index) | OAI-SearchBot, Claude-SearchBot, PerplexityBot | citations in ChatGPT/Claude/Perplexity search |
-| **Live fetch** (page loads at question time) | ChatGPT-User, Perplexity-User, Claude-User | direct citations & traffic at answer time |
+| **Live fetch** (page loads at question time) | ChatGPT-User, Perplexity-User, Claude-User, Google-Agent | direct citations & traffic at answer time |
 
 ```
 # If citations are the goal, Allow across the board is the default
@@ -60,7 +60,27 @@ Allow: /
 
 If your content is an asset and you only want to block **training**, Disallow only the
 first row — blocking search/fetch along with it kills citation traffic itself.
-The roster changes — recheck each vendor's crawler docs quarterly.
+The roster changes — check the date below and recheck each vendor's docs quarterly.
+
+> Last verified: 2026-11-03 against each vendor's official docs: [OpenAI](https://developers.openai.com/api/docs/bots) ·
+> [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler) ·
+> [Google](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) ·
+> [Perplexity](https://docs.perplexity.ai/guides/bots) · [Apple](https://support.apple.com/en-us/119829) ·
+> [Common Crawl](https://commoncrawl.org/ccbot)
+
+- `Google-Extended` and `Applebot-Extended` are **robots.txt control tokens**. No request ever
+  arrives under those names, so don't look for them in logs — Googlebot and Applebot do the
+  crawling, and these tokens only decide whether that data may be used for training (for
+  Google, also grounding in Gemini Apps and Vertex AI)
+- Blocking `Google-Extended` leaves Google Search untouched — AI Overviews and AI Mode are
+  part of Search and are governed by your Googlebot rules. To limit what AI features show,
+  use `nosnippet`, `data-nosnippet` and `max-snippet`
+- `ChatGPT-User`, `Perplexity-User` and `Google-Agent` fetch on a user's request, and their
+  vendors say they **may not follow robots.txt**. Don't assume a Disallow stops them
+  (`Claude-User` is documented as honoring robots.txt)
+- ⚠️ **Your CDN/WAF decides first**: if a bot-blocking setting (Cloudflare and the like)
+  rejects AI crawlers, robots.txt Allow lines mean nothing. Check your host's bot settings,
+  and check your logs for 403/429 responses to the user agents above
 
 - [ ] **Check your Bing index**: ChatGPT search relies on the Bing index on top of its own
       crawler. If you're not in Bing Webmaster Tools, start with section 0 of
