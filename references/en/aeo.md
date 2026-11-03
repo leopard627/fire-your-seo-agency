@@ -1,4 +1,4 @@
-# AEO — Answer Engine Optimization (Google AI Overviews · Bing Copilot)
+# AEO — Answer Engine Optimization (Google AI Overviews & AI Mode · Bing Copilot)
 
 The lane that makes the AI answer box above the search results cite you. Answer engines
 don't "read and summarize" your page — they **find and extract the sentence that is the

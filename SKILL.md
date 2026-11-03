@@ -30,14 +30,14 @@ description: SEO·AEO·GEO·LLMO·NEO(네이버) 다섯 레인을 진단하고 �
 
 ```bash
 # 크롤러의 눈: JS 없이 무엇이 보이는가
-curl -sL https://example.com | grep -c "<h1"          # 본문이 SSR로 있는가
+curl -sL https://example.com | grep -oi '<h1' | wc -l  # 본문이 SSR로 있는가 (압축된 한 줄 HTML도 셈)
 curl -sL https://example.com | grep -oiE '<meta[^>]*robots[^>]*>'   # ⚠️ noindex 사고 감지
 curl -sIL https://example.com | grep -i 'x-robots-tag'              # 헤더 레벨 noindex도
 curl -sL https://example.com | grep -cE '<title|og:|application/ld\+json'  # 메타·OG·LD 존재
 curl -sL https://example.com/robots.txt                # 크롤러 허용 정책
 curl -sL https://example.com/sitemap.xml | head        # 사이트맵 존재·규모
 curl -sL https://example.com/llms.txt                  # GEO 준비 여부
-curl -s -o /dev/null -w '%{http_code}' https://example.com/없는페이지  # 404가 404인가
+curl -s -o /dev/null -w '%{http_code}' https://example.com/no-such-page-404-check  # 404가 404인가
 # 콘텐츠 운영: 블로그·피드가 있는가, 최근 발행은 언제인가
 curl -s -o /dev/null -w '%{http_code}' https://example.com/blog       # 서브 블로그 존재
 curl -s -o /dev/null -w '%{http_code}' https://example.com/feed.xml   # RSS/Atom

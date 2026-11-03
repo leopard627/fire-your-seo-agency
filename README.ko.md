@@ -67,6 +67,13 @@ git clone https://github.com/leopard627/fire-your-seo-agency.git .claude/skills/
 git clone https://github.com/leopard627/fire-your-seo-agency.git ~/.claude/skills/fire-your-seo-agency
 ```
 
+Codex에서는 `.agents/skills` 아래에 두면 됩니다 (복사본을 저장소에 커밋할 필요 없음):
+
+```bash
+git clone https://github.com/leopard627/fire-your-seo-agency.git .agents/skills/fire-your-seo-agency   # 프로젝트
+git clone https://github.com/leopard627/fire-your-seo-agency.git ~/.agents/skills/fire-your-seo-agency # 개인
+```
+
 그리고 Claude Code에서:
 
 ```
@@ -118,9 +125,9 @@ references/
   measure.md          ← 측정 루프 (고치고 끝이 아니다)
   en/                 ← 전체 레퍼런스 영문 미러 (사람 독자용)
 .claude-plugin/       ← 플러그인·마켓플레이스 매니페스트 (/plugin 설치 지원)
-tools/                ← 저장소 검사(validate.py) + 무손실 자산 재압축
+tools/                ← 저장소 검사(validate.py) + 외부 도메인 허용 목록
 tests/                ← 검사별 단위 테스트
-.github/workflows/    ← 푸시·PR마다 검사·테스트·자산 검사를 도는 CI
+.github/workflows/    ← 푸시·PR마다 검사·테스트, 매월 크롤러 표 신선도 점검
 ```
 
 > `references/`의 한국어 문서가 정본이고(에이전트가 읽는 것), `references/en/`은
@@ -128,21 +135,23 @@ tests/                ← 검사별 단위 테스트
 
 ## 저장소 검사
 
-이 저장소는 스스로를 검사합니다 — `.github/workflows/validate.yml`이 푸시·PR마다 아래를
-전부 돌립니다:
+`.github/workflows/validate.yml`이 푸시·PR마다 돌리는 검사입니다 (표준 라이브러리만 사용):
 
 ```bash
-python3 tools/validate.py --strict          # 검사 10종, 표준 라이브러리만 사용
-python3 -m unittest discover -s tests -t .  # 검사별 단위 테스트
-python3 -m pip install pillow
-python3 tools/optimize_assets.py --check    # 재압축 여지가 있는 자산 탐지
+python3 tools/validate.py                   # 저장소 검사
+python3 -m unittest discover -s tests -t .  # 검사기 테스트
+python3 tools/validate.py --max-age 100     # 크롤러 표 확인일이 100일 넘었는가 (매월 자동)
 ```
 
-`tools/validate.py`가 잡는 것은 문서 저장소에서 조용히 썩는 것들입니다: `SKILL.md`
-frontmatter 계약(케밥 표기 이름·64자 이름 한도·1024자 한 줄 설명), `plugin.json` ↔
-`marketplace.json` 버전·이름 일치, 매니페스트 버전과 `CHANGELOG.md` 일치, 상대 링크와
-앵커, 한/영 레퍼런스 구조 일치(제목 수·표 행·체크박스·절 번호), 자산 용량 예산과 프리뷰
-크기, MIT 라이선스 메타데이터, 모든 텍스트 파일의 시크릿 스캔.
+- **도메인** — 문서에 나오는 모든 외부 URL·도메인은 `tools/allowed-domains.txt`에 있어야
+  합니다. 새 도메인은 그 파일을 고치는 diff로만 들어옵니다
+- **크롤러** — `geo.md`의 AI 크롤러 표와 `measure.md`의 로그 집계 명령이 같은 User-agent를
+  다루는지 (한/영 모두)
+- **릴리스** — `SKILL.md`·`plugin.json`·`marketplace.json`·`CHANGELOG.md`의 이름·버전 일치
+- **미러** — 영문 미러가 한국어 정본과 구조(제목·절 번호·표·체크박스)와 외부 출처가 같은지
+- **링크·스킬** — 상대 링크·앵커·경로 언급이 실재하는지, `SKILL.md` frontmatter 한도
+
+기여 기준은 [CONTRIBUTING.md](./CONTRIBUTING.md)에 있습니다.
 
 ## Star History
 

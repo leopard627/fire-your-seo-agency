@@ -20,8 +20,10 @@ If you don't capture the before state, you can never prove the effect:
 
 ```bash
 # Count AI crawler visits in the access log (leading indicator)
-grep -iE 'GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-User|PerplexityBot' access.log \
-  | awk '{print $1}' | wc -l
+AI_BOTS='GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|Claude-User|PerplexityBot|Perplexity-User|CCBot|Google-Agent'
+grep -ciE "$AI_BOTS" access.log
+# Status-code breakdown — 403/429 means your CDN/WAF is blocking them (field 9 in combined log format)
+grep -iE "$AI_BOTS" access.log | awk '{print $9}' | sort | uniq -c
 # No log access? Substitute your host's bot-traffic breakdown (Cloudflare/Vercel etc.)
 ```
 

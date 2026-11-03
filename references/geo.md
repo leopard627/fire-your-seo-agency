@@ -35,7 +35,7 @@ AI 크롤러는 **용도가 세 종류**고, robots.txt 정책은 용도별로 �
 |---|---|---|
 | **학습** (모델 훈련 데이터 수집) | GPTBot, ClaudeBot, Google-Extended, CCBot, Applebot-Extended | 미래 모델의 브랜드 인지 (LLMO) |
 | **검색 색인** (AI 검색의 자체 인덱스) | OAI-SearchBot, Claude-SearchBot, PerplexityBot | ChatGPT·Claude·Perplexity 검색 인용 |
-| **실시간 fetch** (사용자 질문 시 페이지 열람) | ChatGPT-User, Perplexity-User, Claude-User | 답변 시점의 직접 인용·트래픽 |
+| **실시간 fetch** (사용자 질문 시 페이지 열람) | ChatGPT-User, Perplexity-User, Claude-User, Google-Agent | 답변 시점의 직접 인용·트래픽 |
 
 ```
 # 인용 유입이 목표라면 전부 Allow가 기본값
@@ -58,7 +58,26 @@ Allow: /
 ```
 
 콘텐츠가 자산이라 **학습만** 막고 싶다면 첫 행(학습용)만 Disallow — 검색·fetch를 같이
-막으면 인용 유입 자체가 죽는다. 명단은 변한다 — 각사 크롤러 문서를 분기마다 확인하라.
+막으면 인용 유입 자체가 죽는다. 명단은 변한다 — 아래 확인일을 보고 분기마다 각사 문서로 다시 확인하라.
+
+> 확인일: 2026-11-03 — 각사 공식 문서 기준: [OpenAI](https://developers.openai.com/api/docs/bots) ·
+> [Anthropic](https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler) ·
+> [Google](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers) ·
+> [Perplexity](https://docs.perplexity.ai/guides/bots) · [Apple](https://support.apple.com/en-us/119829) ·
+> [Common Crawl](https://commoncrawl.org/ccbot)
+
+- `Google-Extended`·`Applebot-Extended`는 **robots.txt 제어 토큰**이다. 이 이름으로 오는 요청은
+  없으니 로그에서 찾지 마라 — 수집은 Googlebot·Applebot이 하고, 이 토큰은 그 데이터를 학습
+  (구글은 Gemini 앱·Vertex AI 그라운딩 포함)에 쓸지만 정한다
+- `Google-Extended`를 막아도 구글 검색 노출은 그대로다 — AI Overviews·AI 모드는 검색의 일부라
+  Googlebot 규칙이 통제한다. AI 기능에 보이는 범위를 줄이려면 `nosnippet`·`data-nosnippet`·
+  `max-snippet`을 쓴다
+- `ChatGPT-User`·`Perplexity-User`·`Google-Agent`는 사용자 요청으로 오기 때문에 **robots.txt를
+  따르지 않을 수 있다**고 각사가 밝힌다. Disallow로 막힌다고 가정하지 마라
+  (`Claude-User`는 robots.txt를 따른다고 명시)
+- ⚠️ **CDN·WAF가 먼저 막는다**: Cloudflare 등의 봇 차단 설정이 AI 크롤러를 거부하면 robots.txt의
+  Allow는 의미가 없다. 호스팅 대시보드의 봇 설정을 보고, 로그에서 위 User-agent의 응답 코드가
+  403·429인지 확인하라
 
 - [ ] **Bing 색인 확인**: ChatGPT 검색은 자체 크롤러에 더해 Bing 색인에 의존한다.
       Bing Webmaster Tools 등록이 안 돼 있으면 `references/aeo.md`의 0번부터 하라
