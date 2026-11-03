@@ -5,7 +5,10 @@ Notable changes per release. Versions match the plugin tags
 `.claude-plugin/marketplace.json` must carry the same version, and
 `tools/validate.py` fails the build when they drift apart.
 
-## Unreleased
+## 1.3.0 — 2026-11-03
+
+Checks that guard against promotional links and drifting docs, and an AI crawler table
+verified against each vendor's documentation.
 
 ### Changed
 
