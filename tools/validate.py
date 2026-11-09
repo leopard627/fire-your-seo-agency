@@ -51,10 +51,20 @@ URL_RE = re.compile(r"https?://([^/\s)\]>\"'`*<|]+)(" + _URL_TAIL + ")", re.I)
 BARE_DOMAIN_RE = re.compile(
     # ASCII-only boundaries: Korean particles attach directly ("example.com에서"), and
     # \w would count them as part of the word and hide the domain.
-    r"(?<![A-Za-z0-9_@./:-])((?:[a-z0-9-]+\.)+(?:com|net|org|io|co|kr|ai|app|dev|me|so|xyz|info|biz"
-    r"|blog|shop|site|page|link|ly|gg|tv))(?![A-Za-z0-9_-])(/" + _URL_TAIL + ")?",
+    # The last label is matched by shape, not a TLD list: a hardcoded list goes stale,
+    # and any TLD missing from it (.gov, .eu, .co.uk, ...) slips through unchecked.
+    r"(?<![A-Za-z0-9_@./:-])((?:[a-z0-9-]+\.)+[a-z]{2,63})(?![A-Za-z0-9_-])(/" + _URL_TAIL + ")?",
     re.I,
 )
+# Extensions a bare-domain-shaped mention can end in that are not delegated TLDs
+# ("robots.txt", "sitemap.xml"), so no registrable domain ends in them either.
+# Extensions that ARE TLDs (.md, .sh, .rs) are not listed on purpose: mentions like
+# `SKILL.md` are cleared by the repo-file check in outbound() instead.
+FILE_EXTS = {"avif", "bmp", "css", "csv", "doc", "eps", "gif", "htm", "html",
+             "ico", "ini", "jpeg", "jpg", "js", "json", "lock", "log", "odt",
+             "otf", "pdf", "png", "ppt", "psd", "sql", "svg", "tif",
+             "tiff", "toml", "ts", "ttf", "txt", "wav", "webm", "webp", "xls",
+             "xml", "yaml", "yml"}
 VERIFIED_RE = re.compile(r"(?:확인일|Last verified):\s*(\d{4}-\d{2}-\d{2})")
 LOG_GREP_RE = re.compile(r"AI_BOTS='([^']+)'")
 
@@ -62,7 +72,11 @@ LOG_GREP_RE = re.compile(r"AI_BOTS='([^']+)'")
 class Repo:
     def __init__(self, root: Path) -> None:
         self.root = root
-        self.files = self._list_files()
+        found = self._list_files()
+        # Every real file can clear a file-mention like `validate.py` in prose,
+        # but only non-skipped dirs are scanned as documents.
+        self.file_names = {p.name.lower() for p in found}
+        self.files = [p for p in found if not SKIP_DIRS & set(p.relative_to(root).parts[:-1])]
 
     def _list_files(self) -> list:
         """Tracked plus untracked-but-not-ignored files, so a new file is checked before it is committed."""
@@ -74,7 +88,7 @@ class Repo:
             paths = [self.root / p for p in out.split("\0") if p]
         except (OSError, subprocess.CalledProcessError):
             paths = list(self.root.rglob("*"))
-        return sorted(p for p in paths if p.is_file() and not SKIP_DIRS & set(p.relative_to(self.root).parts[:-1]))
+        return sorted(p for p in paths if p.is_file())
 
     def docs(self) -> list:
         return [p for p in self.files if p.suffix.lower() in DOC_SUFFIXES]
@@ -189,13 +203,19 @@ def check_links(repo: Repo) -> list:
     return problems
 
 
-def outbound(text: str):
+def outbound(text: str, repo_files=frozenset()):
     """Yield (host, path) for every URL and bare domain in text."""
     for regex in (URL_RE, BARE_DOMAIN_RE):
         for host, path in regex.findall(text):
             host = host.lower().split(":")[0].rstrip(".")
-            if regex is BARE_DOMAIN_RE and "." not in host:
-                continue
+            if regex is BARE_DOMAIN_RE and not path:
+                # `SKILL.md` or robots.txt is a file mention, not a domain: clear it
+                # when it names a file in the repo or ends in a non-TLD extension.
+                # With a path it is a domain reference (shady-seo.com/offer), never
+                # a file mention, so exemptions stay out.
+                if ("." not in host or host in repo_files
+                        or host.rsplit(".", 1)[1] in FILE_EXTS):
+                    continue
             yield host, unquote(path or "")
 
 
@@ -222,9 +242,10 @@ def check_domains(repo: Repo) -> list:
     if not entries:
         return ["%s is missing or empty" % ALLOWLIST]
     problems = []
+    names = repo.file_names
     for path in repo.docs():
         for lineno, line in enumerate((repo.read(repo.rel(path)) or "").splitlines(), start=1):
-            for host, url_path in outbound(line):
+            for host, url_path in outbound(line, names):
                 if not allowed(host, url_path, entries):
                     problems.append("%s:%d: %s%s is not on %s" % (repo.rel(path), lineno, host, url_path, ALLOWLIST))
     return problems
@@ -245,6 +266,7 @@ def structure(text: str) -> dict:
 
 def check_mirror(repo: Repo) -> list:
     problems = []
+    names = repo.file_names
     for source, mirror in MIRRORS:
         ko = {p.name for p in (repo.root / source).glob("*.md")}
         en = {p.name for p in (repo.root / mirror).glob("*.md")}
@@ -254,7 +276,7 @@ def check_mirror(repo: Repo) -> list:
             a, b = repo.read("%s/%s" % (source, name)) or "", repo.read("%s/%s" % (mirror, name)) or ""
             sa, sb = structure(a), structure(b)
             problems += ["%s: %s differ (ko %s, en %s)" % (name, k, sa[k], sb[k]) for k in sa if sa[k] != sb[k]]
-            ha, hb = {h for h, _ in outbound(a)}, {h for h, _ in outbound(b)}
+            ha, hb = {h for h, _ in outbound(a, names)}, {h for h, _ in outbound(b, names)}
             if ha != hb:
                 problems.append("%s: outbound hosts differ (only ko: %s, only en: %s)"
                                 % (name, sorted(ha - hb), sorted(hb - ha)))

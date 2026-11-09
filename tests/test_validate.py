@@ -144,6 +144,28 @@ class TestDomains(CheckTestCase):
     def test_subdomain_of_listed_host(self) -> None:
         self.assertFalse(self.run_checks(self.readme("https://blog.example.com/post"))["domains"])
 
+    def test_bare_domain_outside_tld_allowlist(self) -> None:
+        # The old TLD list ended at |tv, so bare domains under .gov, .eu or a
+        # two-part suffix like .co.uk were never checked at all.
+        for host in ("shady-seo.gov", "agency.eu", "fake-case.co.uk"):
+            with self.subTest(host=host):
+                self.assert_only_failure("domains", self.readme("사례: %s" % host), host)
+
+    def test_file_mentions_are_not_domains(self) -> None:
+        text = "robots.txt·sitemap.xml·access.log·next.js·logo.png·guide.pdf·`SKILL.md`·`plugin.json` 참고"
+        self.assertFalse(self.run_checks(self.readme(text))["domains"])
+
+    def test_tld_extension_domains_still_flag(self) -> None:
+        # .py (Paraguay), .sh, .md are delegated TLDs, so agency.py or a
+        # script.sh-shaped host is a real domain, not a file mention.
+        for host in ("agency.py", "script.sh"):
+            with self.subTest(host=host):
+                self.assert_only_failure("domains", self.readme("사례: %s" % host), host)
+
+    def test_file_named_like_domain_does_not_whitelist_paths(self) -> None:
+        files = {"README.md": "see shady-seo.com/offer", "shady-seo.com": "x"}
+        self.assert_only_failure("domains", files, "shady-seo.com")
+
     def test_missing_allowlist(self) -> None:
         self.assert_only_failure("domains", {"tools/allowed-domains.txt": None}, "missing or empty")
 
